@@ -5,9 +5,9 @@ import pureconfig.error.ConfigReaderFailures
 import pureconfig.generic.auto._
 
 case class DatabaseConfig(driver: String,
-                    connection: String,
-                    username: String,
-                    password: String)
+                          connection: String,
+                          username: String,
+                          password: String)
 
 case class HttpConfig(host: String, port: Int, secretKey: String)
 
