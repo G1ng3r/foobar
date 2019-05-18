@@ -2,7 +2,8 @@ package com.foobar.now.model
 
 case class User(
                id: Long,
-               nickname: String,
+               login: String,
+               email: String,
                avatar: String,
                karma: Int
                )
