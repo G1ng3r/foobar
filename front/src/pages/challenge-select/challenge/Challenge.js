@@ -9,7 +9,7 @@ const handleDoItClick = (history) => () => history.push('/challenge/take')
 const Header = ({ type, avatar, name }) => (
     <div>
         <Avatar size="small" icon="user" />
-        <Typography.Text>{name}</Typography.Text>
+        <Typography.Text className={style.text}>{name}</Typography.Text>
     </div>
 )
 

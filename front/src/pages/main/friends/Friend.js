@@ -1,11 +1,12 @@
-import { Avatar, Card, Typography } from "antd"
+import { Avatar, Card, Icon, Typography } from "antd"
 import React from "react"
 import style from './Friend.module.css'
 
-const Header = ({ avatar, name }) => (
+const Header = ({ avatar, name, badges = [] }) => (
     <div>
         <Avatar size="small" icon="user" />
-        <Typography.Text>{name}</Typography.Text>
+        {badges.length > 0 && <Icon type="star" style={{ color: 'gold' }} />}
+        <Typography.Text className={style.text}>{name}</Typography.Text>
     </div>
 )
 

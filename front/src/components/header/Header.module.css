@@ -1,8 +1,8 @@
 
 .header {
     background-color: rgb(255, 255, 255);
-    padding: 20px 20px 8px;
-    min-height: 180px;
+    padding: 20px 0 8px 20px;
+    min-height: 140px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -33,10 +33,9 @@
 }
 
 .badges {
-    text-align: left;
+    text-align: center;
 }
 
 .title {
     text-align: left;
-    margin-left: 8px;
 }

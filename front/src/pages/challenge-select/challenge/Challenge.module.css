@@ -1,4 +1,7 @@
 
+.text {
+    margin-left: 16px;
+}
 
 .card {
     border-radius: 8px;
