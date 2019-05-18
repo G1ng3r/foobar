@@ -26,8 +26,9 @@ object WebServer extends TaskApp with LazyLogging {
   }
 
   private def initRestService(config: AppConfig)(xa: HikariTransactor[Task]): Task[Http.ServerBinding] = {
+
     val controllers = Seq(
-      new UserController(new UserService(new UserDao, xa)),
+      new UserController(config.http, new UserService(new UserDao, xa)),
       new ChallengeController(config.http, new ChallengeService(new ChallengeDao(), xa)),
       new ChallengeTypeController(config.http, new ChallengeTypeService(new ChallengeTypeDao(), xa))
     )

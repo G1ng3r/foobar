@@ -9,6 +9,6 @@ import doobie.implicits._
 class UserService(userDao: UserDao, xa: Transactor[Task]) {
 
   def signIn(si: SignIn): Task[User] = {
-    userDao.get(si.loginOrEmail, si.password).transact(xa)
+    userDao.get(si.login, si.password).transact(xa)
   }
 }

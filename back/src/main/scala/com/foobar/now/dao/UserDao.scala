@@ -7,7 +7,7 @@ import doobie.implicits._
 class UserDao extends SqlPagination {
 
   def get(loginOrEmail: String, password: String): ConnectionIO[User] = {
-    sql"""select * from user
+    sql"""select * from public.user
          |where (login = $loginOrEmail and password = $password)
          |or (login = $loginOrEmail and password = $password)""".stripMargin
       .query[User]

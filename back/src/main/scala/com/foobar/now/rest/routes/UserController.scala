@@ -14,19 +14,20 @@ import monix.execution.Scheduler
 
 import scala.util.{Failure, Success}
 
-class UserController(userService: UserService, conf: HttpConfig)(implicit s: Scheduler)
+class UserController(conf: HttpConfig, userService: UserService)(implicit s: Scheduler)
   extends Controller with FailFastCirceSupport with JwtSupport {
 
   override val route: Route = pathPrefix("user") {
     (post & path("signin")) {
       entity(as[SignIn]) { si =>
         val tokenF = userService.signIn(si).map(user => encodeToken(TokenClaim(user.id).asJson.noSpaces, conf)).runToFuture
+        userService.signIn(si).runToFuture.map(println).recover{case x => println(x)}
         onComplete(tokenF){
           case Success(token) =>
             respondWithHeader(RawHeader("Access-Token", token)) {
               complete(StatusCodes.OK)
             }
-          case Failure(ex) => complete(StatusCodes.Unauthorized)
+          case Failure(ex) => complete(StatusCodes.Unauthorized -> ex.getMessage)
         }
 
       }
