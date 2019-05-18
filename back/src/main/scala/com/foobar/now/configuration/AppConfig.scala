@@ -9,7 +9,7 @@ case class DatabaseConfig(driver: String,
                     username: String,
                     password: String)
 
-case class HttpConfig(host: String, port: Int)
+case class HttpConfig(host: String, port: Int, secretKey: String)
 
 case class AppConfig(database: DatabaseConfig, http: HttpConfig)
 

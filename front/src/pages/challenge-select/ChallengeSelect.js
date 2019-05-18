@@ -1,5 +1,4 @@
 import React from "react"
-import { Typography } from "antd"
 import Challenge from "./challenge/Challenge"
 
 //FIXME: С бэка
