@@ -32,7 +32,7 @@ const friends = [
         name: 'Саян Базарсадаев',
         avatar: '',
         lastCompletedChallenge: {
-            title: '???',
+            title: 'Полежал на диване',
             date: '21.04.2019'
         }
     },

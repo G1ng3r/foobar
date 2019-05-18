@@ -10,10 +10,7 @@ export default () => (
     <React.Fragment>
         <div className={style.content}>
             <Events/>
-
             <Friends/>
-
-
         </div>
         <Affix offsetBottom={32} className={style["action-bar"]}>
             <DoItButton />

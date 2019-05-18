@@ -2,6 +2,7 @@
 
 .card {
     border-radius: 8px;
-    margin: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     padding: 8px;
 }

@@ -1,0 +1,14 @@
+.content {
+    min-height: calc(100vh - 192px);
+    margin: 20px;
+}
+
+.action-bar > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.separator {
+    width: 20px;
+}
