@@ -1,0 +1,8 @@
+.content {
+    min-height: calc(100vh - 192px);
+}
+
+.action-bar {
+    flex: auto;
+    align-items: center;
+}

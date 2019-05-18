@@ -24,5 +24,6 @@ lazy val root = (project in file("."))
       "com.github.pureconfig" %% "pureconfig" % pureconfigV,
       "ch.qos.logback" % "logback-classic" % logbackV,
       "com.typesafe.scala-logging" %% "scala-logging" % `scala-loggingV`
-    )
+    ),
+    scalacOptions += "-Ypartial-unification"
   )
