@@ -3,12 +3,15 @@ package com.foobar.now
 import akka.http.scaladsl.Http
 import cats.effect._
 import com.foobar.now.configuration.AppConfig
+import com.foobar.now.dao.UserDao
 import com.foobar.now.database.DatabaseTransactor
 import com.foobar.now.rest.routes.UserController
 import com.foobar.now.rest.{HttpServer, PublicApiEndpoint}
+import com.foobar.now.service.UserService
 import com.typesafe.scalalogging.LazyLogging
 import doobie.hikari.HikariTransactor
 import monix.eval._
+import monix.execution.Scheduler.Implicits.global
 
 object WebServer extends TaskApp with LazyLogging {
 
@@ -24,7 +27,7 @@ object WebServer extends TaskApp with LazyLogging {
 
   private def initRestService(config: AppConfig)(xa: HikariTransactor[Task]): Task[Http.ServerBinding] = {
     val controllers = Seq(
-      new UserController(xa)
+      new UserController(new UserService(new UserDao, xa))
     )
 
     val routes = new PublicApiEndpoint(controllers).route

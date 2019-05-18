@@ -7,23 +7,23 @@ import doobie.util.transactor.Transactor
 import monix.eval.Task
 import doobie.implicits._
 
-class ChallengeService(challengeDao: ChallengeDao, transactor: Transactor[Task]) {
+class ChallengeService(challengeDao: ChallengeDao, xa: Transactor[Task]) {
   def createChallenge(challengeType: ChallengeType,
                       creator: Long,
                       assignedTo: Long): Task[Unit] = {
     val challenge = Challenge(0, challengeType.id, creator, assignedTo, ChallengeStatus.Assigned)
-    challengeDao.create(challenge).transact(transactor).map(_ => ())
+    challengeDao.create(challenge).transact(xa).map(_ => ())
   }
 
   def getChallenge(id: Long): Task[Challenge] = {
-    challengeDao.get(id).transact(transactor)
+    challengeDao.get(id).transact(xa)
   }
 
   def getAssignedChallenges(userId: Long, limit: Int, offset: Int): Task[List[Challenge]] = {
     challengeDao.getAssigned(userId, ChallengeStatus.Assigned, limit, offset)
       .compile
       .toList
-      .transact(transactor)
+      .transact(xa)
   }
 
   def acceptChallenge(id: Long): Task[Unit] = {
@@ -40,7 +40,7 @@ class ChallengeService(challengeDao: ChallengeDao, transactor: Transactor[Task])
 
   private def updateStatus(id: Long, status: ChallengeStatus) = {
     challengeDao.setStatus(id, status)
-      .transact(transactor)
+      .transact(xa)
       .map(_ => ())
   }
 }

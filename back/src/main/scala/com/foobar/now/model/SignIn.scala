@@ -1,3 +1,3 @@
 package com.foobar.now.model
 
-case class SignIn(email: String, password: String)
+case class SignIn(loginOrEmail: String, password: String)
