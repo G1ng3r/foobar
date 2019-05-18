@@ -16,7 +16,7 @@ export default class ChallengeGive extends React.Component {
     loadUsers = () => {
 
         //FIXME: С бэка
-        axios.get('https://randomuser.me/api/?results=50').then((data) => {
+        axios.get('https://randomuser.me/api/?results=50&nat=CA').then((data) => {
             const users = data.data.results.map((user, idx) => ({
                 name: `${user.name.first} ${user.name.last}`,
                 avatar: user.picture.thumbnail,

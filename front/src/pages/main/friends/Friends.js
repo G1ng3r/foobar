@@ -13,7 +13,10 @@ const friends = [
         lastCompletedChallenge: {
             title: 'Спас галактику!',
             date: '25.04.2019'
-        }
+        },
+        badges: [
+            1
+        ]
     },
     {
         name: 'Костя Лобов',
@@ -37,7 +40,10 @@ const friends = [
         lastCompletedChallenge: {
             title: 'Полежал на диване',
             date: '21.04.2019'
-        }
+        },
+        badges: [
+            1
+        ]
     },
 ]
 
