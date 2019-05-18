@@ -8,6 +8,6 @@ const handleDoItClick = (history) => () => history.push('/challenge/search')
 
 export default withRouter(({ history }) => (
     <Button className={style.button} type="primary" shape="round" size={'large'} icon="exclamation" onClick={handleDoItClick(history)}>
-        Do it now
+        Взять задание
     </Button>
 ))

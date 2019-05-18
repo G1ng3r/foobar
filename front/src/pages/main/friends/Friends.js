@@ -1,6 +1,9 @@
 import React from "react"
-import { Typography } from "antd"
+import { Button, Typography } from "antd"
 import Friend from "./Friend"
+
+import styles from './Friends.module.css'
+import { withRouter } from "react-router"
 
 //FIXME: С бэка
 const friends = [
@@ -38,12 +41,25 @@ const friends = [
     },
 ]
 
-export default () => (
+const giveChallenge = (history) => () => {
+    history.push('/challenge/give')
+}
+
+export default withRouter(({ history }) => (
     <React.Fragment>
-        <Typography.Title level={4}>Друзья</Typography.Title>
+        <div className={styles.header}>
+            <Typography.Title level={4} className={styles.title}>Друзья</Typography.Title>
+            <Button type="primary" className={styles.button} onClick={giveChallenge(history)}>
+                Дать задание
+            </Button>
+        </div>
         {friends.map(friend => (
             <Friend key={friend.name} friend={friend} />
         ))}
+        <div className={styles.footer}>
+        <Button type="primary" className={styles.button} onClick={giveChallenge(history)}>
+            Дать задание
+        </Button>
+        </div>
     </React.Fragment>
-)
-
+))
