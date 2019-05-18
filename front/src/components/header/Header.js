@@ -1,23 +1,22 @@
 import React from 'react';
-import { Typography, Row, Col, Avatar } from 'antd';
+import { Col, Row, Typography } from 'antd';
 
 import styles from './Header.module.css'
-
+import Avatar from "./avatar/Avatar"
 
 export default () => (
     <header className={styles.header}>
-        <Row gutter={16} type="flex" justify="space-around" align="middle">
 
+        <Typography.Title level={4}>Now!</Typography.Title>
 
-            <Col span={6}>
-                <Avatar shape="square" size={64} icon="user"/>
+        <Row gutter={16} type="flex" justify="space-around" align="middle" className={styles.user}>
+            <Col span={8}>
+
+                <Avatar />
             </Col>
-            <Col span={18}>
-                <Typography.Text>
-                    Саян Базарсадаев
-                </Typography.Text>
-            </Col>
-
+            <Col span={8}>Лента</Col>
+            <Col span={8}>Лупа</Col>
         </Row>
+
     </header>
 )

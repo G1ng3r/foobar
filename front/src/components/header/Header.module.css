@@ -1,11 +1,22 @@
 
 .header {
     background-color: rgb(255, 255, 255);
+    padding: 20px;
     min-height: 192px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: start;
+    justify-content: start;
     font-size: calc(10px + 2vmin);
     color: black;
+    text-align: center;
+}
+
+.user {
+    width: 100%;
+}
+
+.avatar {
+    width: 32px;
+    height: 48px;
 }
