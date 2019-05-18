@@ -9,7 +9,6 @@ import com.foobar.now.rest.{HttpServer, PublicApiEndpoint}
 import com.typesafe.scalalogging.LazyLogging
 import doobie.hikari.HikariTransactor
 import monix.eval._
-import monix.execution.Scheduler.Implicits.global
 
 object WebServer extends TaskApp with LazyLogging {
 

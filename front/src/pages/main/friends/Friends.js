@@ -32,7 +32,7 @@ const friends = [
         name: 'Саян Базарсадаев',
         avatar: '',
         lastCompletedChallenge: {
-            title: '???',
+            title: 'Полежал на диване',
             date: '21.04.2019'
         }
     },
@@ -42,7 +42,7 @@ export default () => (
     <React.Fragment>
         <Typography.Title level={4}>Друзья</Typography.Title>
         {friends.map(friend => (
-            <Friend friend={friend} />
+            <Friend key={friend.name} friend={friend} />
         ))}
     </React.Fragment>
 )

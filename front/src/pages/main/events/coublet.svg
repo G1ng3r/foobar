@@ -21,13 +21,8 @@
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Dashboard" transform="translate(-29.000000, -250.000000)">
-            <rect id="Rectangle" fill="url(#linearGradient-1)" x="0" y="275.320197" width="373.002667" height="534.679803"></rect>
-            <rect id="Rectangle" stroke="#979797" x="0.5" y="0.5" width="372.002667" height="809"></rect>
-            <g id="Oval" fill="black" fill-opacity="1">
-                <use filter="url(#filter-3)" xlink:href="#path-2"></use>
-            </g>
+
             <g id="promo" transform="translate(19.946667, 211.477833)">
-                <rect id="Rectangle" fill="url(#linearGradient-4)" x="0" y="0" width="334.106667" height="152.623153" rx="5"></rect>
                 <g id="Group-6" transform="translate(14.960000, 42.065439)" stroke="#FFFFFF" stroke-linecap="square" stroke-width="6">
                     <path d="M24.9333333,80.1328371 L65.3253333,80.1328371" id="Line-4"></path>
                     <path d="M44.3813333,56.5171475 L44.3813333,79.1353001" id="Line-3"></path>
