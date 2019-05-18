@@ -11,6 +11,7 @@ import IndexPage from "./pages/index-page/IndexPage"
 import Header from "./components/header/Header"
 
 import './App.css';
+import ChallengeGive from "./pages/challenge-give/ChallengeGive"
 
 export default () => (
     <div>
@@ -25,7 +26,7 @@ export default () => (
                     <Route path={'/challenge/select'} component={ChallengeSelect}/>
                     <Route path={'/challenge/take'} component={ChallengeTake}/>
                     <Route path={'/challenge/current'} component={ChallengeCurrent}/>
-                    {/*<Route path={'/challenge'} component={Challenge}/>*/}
+                    <Route path={'/challenge/give'} component={ChallengeGive}/>
                     <Route path={'/settings'} exact={true} component={() => <h1>HUI VAM</h1>}/>
                 </div>
                 <Redirect to={'/main'}/>

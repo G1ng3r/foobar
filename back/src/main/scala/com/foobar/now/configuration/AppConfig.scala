@@ -7,9 +7,9 @@ import pureconfig.generic.auto._
 import scala.concurrent.duration.FiniteDuration
 
 case class DatabaseConfig(driver: String,
-                    connection: String,
-                    username: String,
-                    password: String)
+                          connection: String,
+                          username: String,
+                          password: String)
 
 case class HttpConfig(host: String, port: Int, secretKey: String, tokenMaxAge: FiniteDuration)
 

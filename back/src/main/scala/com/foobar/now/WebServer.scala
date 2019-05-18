@@ -3,11 +3,11 @@ package com.foobar.now
 import akka.http.scaladsl.Http
 import cats.effect._
 import com.foobar.now.configuration.AppConfig
-import com.foobar.now.dao.UserDao
+import com.foobar.now.dao.{ChallengeDao, ChallengeTypeDao, UserDao}
 import com.foobar.now.database.DatabaseTransactor
-import com.foobar.now.rest.routes.UserController
+import com.foobar.now.rest.routes.{ChallengeController, ChallengeTypeController, UserController}
 import com.foobar.now.rest.{HttpServer, PublicApiEndpoint}
-import com.foobar.now.service.UserService
+import com.foobar.now.service.{ChallengeService, ChallengeTypeService, UserService}
 import com.typesafe.scalalogging.LazyLogging
 import doobie.hikari.HikariTransactor
 import monix.eval._
@@ -27,7 +27,9 @@ object WebServer extends TaskApp with LazyLogging {
 
   private def initRestService(config: AppConfig)(xa: HikariTransactor[Task]): Task[Http.ServerBinding] = {
     val controllers = Seq(
-      new UserController(new UserService(new UserDao, xa))
+      new UserController(new UserService(new UserDao, xa)),
+      new ChallengeController(config.http, new ChallengeService(new ChallengeDao(), xa)),
+      new ChallengeTypeController(config.http, new ChallengeTypeService(new ChallengeTypeDao(), xa))
     )
 
     val routes = new PublicApiEndpoint(controllers).route
