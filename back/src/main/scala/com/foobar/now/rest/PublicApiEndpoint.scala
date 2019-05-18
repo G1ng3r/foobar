@@ -6,8 +6,8 @@ import cats.effect.Resource
 import doobie.hikari.HikariTransactor
 import monix.eval.Task
 
-class PublicApiEndpoint(transactor: Resource[Task, HikariTransactor[Task]]) {
+class PublicApiEndpoint(transactor: Resource[Task, HikariTransactor[Task]], routes: Seq[Route]) {
   private val prefix: String = "/api/v1"
 
-  val routes: Route = (get & path("hello")) (complete("123"))
+  val route: Route = (get & path("hello")) (complete("123"))
 }
