@@ -1,14 +1,24 @@
 import React from "react"
-import style from "../challenge-search/ChallengeSearch.module.css"
-import { Button } from "antd"
+import { Link } from 'react-router-dom';
 
+import style from './IndexPage.module.css'
 
 export default () => (
     <div className={style.content}>
 
+        <div className={style.greyBlock}>
+            <div className={style.propmoBlock}>
+                <p className={style.introText}>Вас приветствует</p>
+                <p className={style.introText}>сервис добрых дел</p>
+                <p className={style.introText}><span className={style.logo}>NOW!</span></p>
+
+                <p className={style.showIntro}>Смотреть интро</p>
+                <Link className={style.skip} to={'/main'}>пропустить</Link>
+
+            </div>
+        </div>
 
 
 
-        <Button href="/main" >Перейти к профилю</Button>
     </div>
 )
