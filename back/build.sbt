@@ -5,7 +5,9 @@ val doobieV = "0.6.0"
 val pureconfigV = "0.11.0"
 val logbackV = "1.2.3"
 val `scala-loggingV` = "3.9.2"
-val circeVersion = "0.10.0"
+val `jwt-akka-httpV` = "1.0.1"
+val circeV = "0.10.0"
+val `jwt-circeV` = "2.1.0"
 val akkaHttpCirceVersion = "1.25.2"
 
 lazy val root = (project in file("."))
@@ -26,9 +28,11 @@ lazy val root = (project in file("."))
       "com.github.pureconfig" %% "pureconfig" % pureconfigV,
       "ch.qos.logback" % "logback-classic" % logbackV,
       "com.typesafe.scala-logging" %% "scala-logging" % `scala-loggingV`,
-      "io.circe" %% "circe-core" % circeVersion,
-      "io.circe" %% "circe-generic" % circeVersion,
-      "io.circe" %% "circe-parser" % circeVersion,
+      "com.emarsys" %% "jwt-akka-http" % `jwt-akka-httpV`,
+      "io.circe" %% "circe-core" % circeV,
+      "io.circe" %% "circe-generic" % circeV,
+      "io.circe" %% "circe-parser" % circeV,
+      "com.pauldijou" %% "jwt-circe" % `jwt-circeV`,
       "de.heikoseeberger" %% "akka-http-circe" % akkaHttpCirceVersion
     ),
     scalacOptions += "-Ypartial-unification"

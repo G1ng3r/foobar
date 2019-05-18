@@ -1,12 +1,12 @@
 
 .header {
     background-color: rgb(255, 255, 255);
-    padding: 20px;
-    min-height: 192px;
+    padding: 20px 20px 8px;
+    min-height: 180px;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-content: start;
+    align-items: flex-start;
+    justify-content: flex-start;
     font-size: calc(10px + 2vmin);
     color: black;
     text-align: center;
@@ -34,4 +34,9 @@
 
 .badges {
     text-align: left;
+}
+
+.title {
+    text-align: left;
+    margin-left: 8px;
 }

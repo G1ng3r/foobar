@@ -8,6 +8,6 @@ class PublicApiEndpoint(controllers: Seq[Controller]) {
   private val prefix: String = "/api/v1"
 
   val route: Route = path(prefix) {
-    controllers.reduce(_.route ~ _.route)
+    controllers.map(_.route).reduce(_ ~ _)
   }
 }
