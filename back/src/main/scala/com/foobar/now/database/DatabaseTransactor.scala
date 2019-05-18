@@ -8,7 +8,7 @@ import cats.implicits._
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 
-object Postgres {
+object DatabaseTransactor {
 
   def apply(config: DatabaseConfig): Resource[Task, HikariTransactor[Task]] =
     for {
