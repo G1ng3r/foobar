@@ -9,7 +9,7 @@ export default () => (
 
         <Row gutter={16} type="flex" className={styles.nav}>
             <Col span={8}>
-                <Typography.Title level={3}>Now!</Typography.Title>
+                <Typography.Title level={3}><a href="/">Now!</a></Typography.Title>
             </Col>
             <Col span={14}>
             </Col>

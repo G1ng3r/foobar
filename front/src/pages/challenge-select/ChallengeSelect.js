@@ -41,10 +41,10 @@ const challenges = {
 export default () => (
     <React.Fragment>
         {challenges.daily.map(challenge => (
-            <Challenge challenge={challenge} type="daily"/>
+            <Challenge key={challenge.name} challenge={challenge} type="daily"/>
         ))}
         {challenges.fromFriends.map(challenge => (
-            <Challenge challenge={challenge}/>
+            <Challenge key={challenge.name} challenge={challenge}/>
         ))}
     </React.Fragment>
 )
