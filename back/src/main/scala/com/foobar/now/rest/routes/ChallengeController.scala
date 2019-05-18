@@ -16,7 +16,7 @@ class ChallengeController(config: HttpConfig,
     pathPrefix("challenge") {
       pathPrefix(LongNumber) { id =>
         (get & pathEndOrSingleSlash) {
-          complete(challengeService.getChallenge(id).runToFuture)
+          complete(challengeService.getChallenge(id))
         } ~
         (delete & path("decline")) {
           complete(challengeService.declineChallenge(token.userId, id))

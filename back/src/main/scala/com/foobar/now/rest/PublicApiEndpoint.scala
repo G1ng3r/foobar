@@ -5,9 +5,7 @@ import akka.http.scaladsl.server.Route
 import com.foobar.now.rest.routes.Controller
 
 class PublicApiEndpoint(controllers: Seq[Controller]) {
-  private val prefix: String = "/api/v1"
-
-  val route: Route = path(prefix) {
+  val route: Route = pathPrefix("api" / "v1") {
     controllers.map(_.route).reduce(_ ~ _)
-  }
+  } ~ path("ok") { complete("I am ok") }
 }

@@ -28,7 +28,6 @@ lazy val root = (project in file("."))
       "com.github.pureconfig" %% "pureconfig" % pureconfigV,
       "ch.qos.logback" % "logback-classic" % logbackV,
       "com.typesafe.scala-logging" %% "scala-logging" % `scala-loggingV`,
-      "com.emarsys" %% "jwt-akka-http" % `jwt-akka-httpV`,
       "io.circe" %% "circe-core" % circeV,
       "io.circe" %% "circe-generic" % circeV,
       "io.circe" %% "circe-parser" % circeV,
