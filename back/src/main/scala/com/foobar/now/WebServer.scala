@@ -1,22 +1,29 @@
 package com.foobar.now
 
 import cats.effect._
-import cats.implicits._
-import com.foobar.now.configuration.AppConfig
-import com.foobar.now.rest.{Controller, HttpServer}
+import com.foobar.now.configuration.{AppConfig, DatabaseConfig}
+import com.foobar.now.database.DatabaseTransactor
+import com.foobar.now.rest.{HttpServer, PublicApiEndpoint}
 import com.typesafe.scalalogging.LazyLogging
+import doobie.hikari.HikariTransactor
 import monix.eval._
 import monix.execution.Scheduler.Implicits.global
-import pureconfig.error.ConfigReaderFailures
 
 object WebServer extends TaskApp with LazyLogging {
 
-  def run(args: List[String]): Task[ExitCode] =
-    for {
-      config <- Task.fromEither[ConfigReaderFailures, AppConfig](err => new Exception(err.toString))(AppConfig())
-      routes <- Task.eval(new Controller().route)
-      _ <- HttpServer(config, routes)
+  def run(args: List[String]): Task[ExitCode] = {
+
+    val main = for {
+      config <- AppConfig()
+      _ <- DatabaseTransactor(config.database).use(initRestService(config))
     } yield ExitCode.Success
 
+    main.onErrorHandle(_=> ExitCode.Error)
+  }
+
+  private def initRestService(config: AppConfig)(xa: HikariTransactor[Task]) = {
+    val routes = new PublicApiEndpoint(DatabaseTransactor(config.database)).routes
+    HttpServer(config.http, routes)
+  }
 }
 
