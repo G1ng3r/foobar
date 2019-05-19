@@ -8,8 +8,6 @@ import { Avatar, Button, Radio } from "antd"
 export default class ChallengeGiveToPerson extends React.Component {
 
     render() {
-        console.log(this.props.match.params.id)
-
         return (
             <div className={style.content}>
                 <Avatar shape="square" size={64}

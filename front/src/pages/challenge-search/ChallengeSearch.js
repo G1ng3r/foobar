@@ -11,7 +11,7 @@ export default withRouter(({ history }) => {
     return (
         <div className={style.content}>
             <div className={style.loader}>
-                <p className={style.text}>Ищем задание</p>
+                <p className={style.text}>Ищем задания</p>
             </div>
         </div>
     )

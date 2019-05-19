@@ -1,7 +1,7 @@
 import React from "react"
 import { Spin, Tabs } from "antd"
 import Friend from "./Friend"
-import axios from "axios"
+import axios from "../../utils/axios"
 
 
 const { TabPane } = Tabs
@@ -10,20 +10,17 @@ export default class ChallengeGive extends React.Component {
 
     state = {
         tab: "1",
+        friends: [],
+        nearby: [],
+        all: [],
+
         users: []
     }
 
     loadUsers = () => {
 
-        //FIXME: С бэка
-        axios.get('https://randomuser.me/api/?results=50&nat=CA&gender=male').then((data) => {
-            const users = data.data.results.map((user, idx) => ({
-                name: `${user.name.first} ${user.name.last}`,
-                avatar: user.picture.thumbnail,
-                id: idx
-            }))
-
-            this.setState({ users })
+        axios.get('user').then(({ data }) => {
+            this.setState({ all: data })
         })
 
     }

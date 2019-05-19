@@ -4,12 +4,12 @@ import style from './Challenge.module.css'
 import { withRouter } from "react-router"
 import cn from 'classnames'
 
-const handleDoItClick = (history) => () => history.push('/challenge/take')
+const handleDoItClick = (history, id) => () => history.push(`/challenge/take/${id}`)
 
 const Header = ({ type, avatar, name }) => (
     <div>
         <Avatar size="small" icon="user"/>
-        <Typography.Text className={style.text}>{name}</Typography.Text>
+        <p className={style.text}>{name}</p>
     </div>
 )
 
@@ -23,7 +23,7 @@ export default withRouter(({ challenge, type, history }) => (
             <Typography.Text>{challenge.description}</Typography.Text>
         </div>
         <Button className={style.button} type="primary" shape="round" size={'large'} icon="exclamation"
-                onClick={handleDoItClick(history)}>
+                onClick={handleDoItClick(history, challenge.id)}>
             Взять
         </Button>
     </Card>
