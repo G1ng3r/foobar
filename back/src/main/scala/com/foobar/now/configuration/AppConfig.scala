@@ -11,9 +11,11 @@ case class DatabaseConfig(driver: String,
                           username: String,
                           password: String)
 
+case class KarmaConfig(declineDecrease: Int)
+
 case class HttpConfig(host: String, port: Int, secretKey: String, tokenMaxAge: FiniteDuration)
 
-case class AppConfig(database: DatabaseConfig, http: HttpConfig)
+case class AppConfig(database: DatabaseConfig, http: HttpConfig, karma: KarmaConfig)
 
 object AppConfig {
   def apply(): Task[AppConfig] =
