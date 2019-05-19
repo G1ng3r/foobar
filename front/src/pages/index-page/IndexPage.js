@@ -17,17 +17,16 @@ export default () => (
                 <p className={style.introText}><span className={style.logo}>NOW!</span></p>
 
                 <iframe
+                    title="propmo"
                     type="text/html"
                     width="330"
                     height="187"
-                    src={`http://www.youtube.com/embed/crhn668ona4?${videoParams}`}
+                    allowfullscreen="allowfullscreen"
+                    src={`http://www.youtube.com/embed/crhn668ona4?${videoParams || ''}`}
                     frameborder="0"
                 />
                 <Link className={style.skip} to={'/login'}>пропустить</Link>
             </div>
         </div>
-
-
-
     </div>
 )

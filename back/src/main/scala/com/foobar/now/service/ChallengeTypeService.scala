@@ -14,4 +14,8 @@ class ChallengeTypeService(challengeTypeDao: ChallengeTypeDao, xa: Transactor[Ta
   def list(limit: Option[Int], offset: Option[Int]): Task[Seq[ChallengeType]] = {
     challengeTypeDao.list(limit.getOrElse(10), offset.getOrElse(0)).compile.toList.transact(xa)
   }
+
+  def get(id: Int): Task[ChallengeType] = {
+    challengeTypeDao.get(id).transact(xa)
+  }
 }

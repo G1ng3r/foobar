@@ -38,7 +38,7 @@ class UserDao {
   }
 
   def friends(userId: Long, limit: Int): fs2.Stream[ConnectionIO, User] = {
-    sql"""select u.id, u.login, u.name, u.email, u.location, u.avatar, u.karma from public.user u, friends f
+    sql"""select u.id, u.login, u.name, u.email, u.location, u.avatar, u.karma from public.user u, friend f
          |where f.user_id = $userId and u.id = f.friend_id
          |order by random() limit $limit
        """.stripMargin
@@ -46,8 +46,14 @@ class UserDao {
       .stream
   }
 
+  def getAllFriends(userId: Long): fs2.Stream[doobie.ConnectionIO, Long] = {
+    sql"select friend_id from friend where user_id = $userId"
+      .query[Long]
+      .stream
+  }
+
   def becomeFriend(userId: Long, friendId: Long): ConnectionIO[Int] = {
-    sql"insert into friends (user_id, friend_id) values ($userId, $friendId) on conflict do nothing"
+    sql"insert into friend (user_id, friend_id) values ($userId, $friendId) on conflict do nothing"
       .update
       .run
   }
