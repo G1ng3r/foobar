@@ -45,4 +45,14 @@ class UserDao {
       .query[User]
       .stream
   }
+
+  def becomeFriend(userId: Long, friendId: Long): ConnectionIO[Int] = {
+    sql"insert into friends (user_id, friend_id) values ($userId, $friendId) on conflict do nothing"
+      .update
+      .run
+  }
+
+  def updateKarma(userId: Long, points: Int): ConnectionIO[Int] = {
+    sql"update public.user set karma = $points where id = $userId".update.run
+  }
 }

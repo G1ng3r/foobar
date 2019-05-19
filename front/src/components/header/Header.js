@@ -13,13 +13,13 @@ const pageTitles = {
     '/challenge/select': 'Выбор задания',
     '/challenge/take': 'Назначаем задание',
     '/challenge/current': 'Задание',
-    '/challenge/give': 'Дать задание',
+    '/challenge/give': 'Задание',
     '/settings': 'Настройки'
 }
 
 
 const getTitle = (location) => {
-    return pageTitles[location.pathname] || ''
+    return pageTitles[location.pathname] || 'Задание'
 }
 export default withRouter(({ location }) => (
     <header className={styles.header}>

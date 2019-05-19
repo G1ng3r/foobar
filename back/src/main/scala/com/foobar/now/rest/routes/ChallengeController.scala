@@ -21,6 +21,9 @@ class ChallengeController(config: HttpConfig,
         } ~
         (put & path("accept")) {
           complete(challengeService.acceptChallenge(token.userId, id))
+        } ~
+        (put & path("complete")) {
+          complete(challengeService.completeChallenge(token.userId, id))
         }
       } ~
       (path(IntNumber / "assign" / LongNumber) & post) { case (challengeTypeId, assignedTo) =>
