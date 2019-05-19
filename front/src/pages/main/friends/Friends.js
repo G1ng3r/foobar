@@ -71,7 +71,6 @@ class Friends extends React.Component {
             // return null
         }
 
-
         return (
             <React.Fragment>
                 <div className={styles.header}>
