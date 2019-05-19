@@ -4,7 +4,7 @@ import com.foobar.now.model.User
 import doobie.free.connection.ConnectionIO
 import doobie.implicits._
 
-class UserDao extends SqlPagination {
+class UserDao {
 
   def signIn(loginOrEmail: String, password: String): ConnectionIO[User] = {
     sql"""select id, login, name, email, location, avatar, karma from public.user
