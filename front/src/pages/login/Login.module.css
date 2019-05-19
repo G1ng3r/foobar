@@ -6,3 +6,12 @@
     align-items: center;
     justify-content: center;
 }
+
+.content > div {
+    width: calc(100% - 60px);
+    max-width: 315px;
+}
+
+.content span {
+    line-height: 0.5;
+}
