@@ -1,6 +1,8 @@
 package com.foobar.now
 
+import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.stream.{ActorMaterializer, Materializer}
 import cats.effect._
 import cats.syntax.all._
 import com.foobar.now.configuration.AppConfig
@@ -32,6 +34,8 @@ object WebServer extends TaskApp with LazyLogging {
   private def initRestService(config: AppConfig,
                               xa: HikariTransactor[Task]): Resource[Task, Http.ServerBinding] = {
     implicit val s: Scheduler = scheduler
+    implicit val actorSystem: ActorSystem = ActorSystem("foobar")
+    implicit val materializer: Materializer = ActorMaterializer()
 
     val userDao = new UserDao
     val challengeTypeDao = new ChallengeTypeDao()
@@ -39,7 +43,7 @@ object WebServer extends TaskApp with LazyLogging {
 
     val controllers = Seq(
       new UserController(config.http, new UserService(userDao, xa)),
-      new ChallengeController(config.http, new ChallengeService(config.karma, challengeTypeDao, challengeDao, userDao, xa)),
+      new ChallengeController(config.http, new ChallengeService(config.karma, config.http, challengeTypeDao, challengeDao, userDao, xa)),
       new ChallengeTypeController(config.http, new ChallengeTypeService(new ChallengeTypeDao(), xa))
     )
 

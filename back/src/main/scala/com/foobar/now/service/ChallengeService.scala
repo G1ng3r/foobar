@@ -1,9 +1,14 @@
 package com.foobar.now.service
 
-import java.io.File
+import java.nio.file.Paths
+import java.util.UUID
 
+import cats.syntax.apply._
+import akka.stream.Materializer
+import akka.stream.scaladsl.{FileIO, Source}
+import akka.util.ByteString
 import cats.data.NonEmptyList
-import com.foobar.now.configuration.KarmaConfig
+import com.foobar.now.configuration.{HttpConfig, KarmaConfig}
 import com.foobar.now.dao.{ChallengeDao, ChallengeTypeDao, UserDao}
 import com.foobar.now.model.ChallengeStatus.ChallengeStatus
 import com.foobar.now.model.{Challenge, ChallengeStatus, ChallengeType}
@@ -13,10 +18,12 @@ import monix.eval.Task
 import doobie.implicits._
 
 class ChallengeService(config: KarmaConfig,
+                       httpConfig: HttpConfig,
                        challengeTypeDao: ChallengeTypeDao,
                        challengeDao: ChallengeDao,
                        userDao: UserDao,
-                       xa: Transactor[Task]) {
+                       xa: Transactor[Task])
+                      (implicit materializer: Materializer) {
   def createChallenge(challengeTypeId: Int,
                       creator: Long,
                       assignedTo: Long): Task[Unit] = {
@@ -59,25 +66,30 @@ class ChallengeService(config: KarmaConfig,
   }
 
   def acceptChallenge(userId: Long, id: Long): Task[Unit] = {
-    updateStatus(id, userId, ChallengeStatus.Accepted)
+    updateStatus(userId, id, ChallengeStatus.Accepted)
       .transact(xa)
       .map(_ => ())
   }
 
   def declineChallenge(userId: Long, id: Long): Task[Unit] = {
     (for {
-      challenge <- updateStatus(id, userId, ChallengeStatus.Declined)
+      challenge <- updateStatus(userId, id, ChallengeStatus.Declined)
       _ <- if (challenge.status == ChallengeStatus.Accepted) penalty(challenge.assigned)
            else connection.unit
     } yield ()).transact(xa)
   }
 
-  def completeChallenge(userId: Long, id: Long, proof: File): Task[Unit] = {
+  def completeChallenge(userId: Long, id: Long, proof: Source[ByteString, Any]): Task[Unit] = {
+    val fileId = UUID.randomUUID().toString
+    Task.deferFuture(
+      proof.runWith(FileIO.toPath(Paths.get(httpConfig.uploadFilesDir).resolve(fileId)))
+    ) *>
     (for {
-      challenge <- challengeDao.complete(id, userId, proof.getAbsolutePath)
+      challenge <- challengeDao.complete(userId, id, fileId)
       challengeType <- challengeTypeDao.get(challenge.typeId)
       _ <- userDao.updateKarma(challenge.assigned, challengeType.difficulty.id)
-      _ <- userDao.becomeFriend(userId, challenge.assigned)
+      _ <- userDao.becomeFriend(challenge.creator, challenge.assigned)
+      _ <- userDao.becomeFriend(challenge.assigned, challenge.creator)
     } yield ()).transact(xa)
   }
 
@@ -102,7 +114,7 @@ class ChallengeService(config: KarmaConfig,
       .transact(xa)
   }
 
-  private def updateStatus(userId: Long, id: Long, status: ChallengeStatus) = {
+  private def updateStatus(id: Long, userId: Long, status: ChallengeStatus) = {
     challengeDao.setStatus(id, userId, status)
   }
 

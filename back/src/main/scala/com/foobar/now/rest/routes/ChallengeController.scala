@@ -1,9 +1,11 @@
 package com.foobar.now.rest.routes
 
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.model.StatusCodes
+import java.nio.file.Paths
+
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives._
+import akka.stream.scaladsl.{FileIO, Flow}
 import com.foobar.now.configuration.HttpConfig
 import com.foobar.now.service.ChallengeService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
@@ -24,8 +26,18 @@ class ChallengeController(val config: HttpConfig,
         (put & path("accept")) {
           complete(challengeService.acceptChallenge(token.userId, challengeId))
         } ~
-          (put & path("complete")) {
-            storeUploadedFile("proof", tempDestination) { case (metadata, file) =>
+        (put & path("complete")) {
+          storeUploadedFile("proof", tempDestination) { case (metadata, file) =>
+            if (metadata.contentType.mediaType.isImage) {
+              complete(challengeService.completeChallenge(token.userId, challengeId, file))
+            } else {
+              complete(StatusCodes.BadRequest, "wrong proof photo uploaded")
+            }
+          }
+        }
+        (put & path("complete")) {
+          withSizeLimit(config.fileUploadSizeLimit) {
+            fileUpload("proof") { case (metadata, file) =>
               if (metadata.contentType.mediaType.isImage) {
                 complete(challengeService.completeChallenge(token.userId, challengeId, file))
               } else {
@@ -33,6 +45,7 @@ class ChallengeController(val config: HttpConfig,
               }
             }
           }
+        }
       } ~
       (path(IntNumber / "assign" / LongNumber) & post) { case (challengeTypeId, assignedTo) =>
         complete(challengeService.createChallenge(challengeTypeId, token.userId, assignedTo))
@@ -57,6 +70,11 @@ class ChallengeController(val config: HttpConfig,
       } ~
       (path("feed" / "created-by-me") & get & parameter('offset.as[Int].?) & parameter('limit.as[Int].?)) { case (offset, limit) =>
         complete(challengeService.assignedToMe(token.userId, limit, offset))
+      } ~
+      (get & path("proof" / Segment)) { proofId =>
+        complete(
+          HttpEntity(ContentTypes.`application/octet-stream`, FileIO.fromPath(Paths.get(config.uploadFilesDir).resolve(proofId)))
+        )
       }
     }
   }

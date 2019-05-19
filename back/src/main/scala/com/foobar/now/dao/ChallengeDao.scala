@@ -34,14 +34,14 @@ class ChallengeDao extends SqlPagination {
     ).stream
   }
 
-  def complete(userId: Long, id: Long, proof: String): doobie.ConnectionIO[Challenge] = {
+  def complete(id: Long, userId: Long, proof: String): doobie.ConnectionIO[Challenge] = {
     val status = ChallengeStatus.Completed
     sql"update challenge set status = $status, proof = $proof where id = $id and assigned = $userId"
       .update
       .withUniqueGeneratedKeys("id", "type_id", "creator", "assigned", "status", "proof")
   }
 
-  def setStatus(userId: Long, id: Long, status: ChallengeStatus): ConnectionIO[Challenge] = {
+  def setStatus(id: Long, userId: Long, status: ChallengeStatus): ConnectionIO[Challenge] = {
     sql"update challenge set status = $status where id = $id and assigned = $userId"
       .update
       .withUniqueGeneratedKeys("id", "type_id", "creator", "assigned", "status", "proof")
@@ -65,6 +65,7 @@ class ChallengeDao extends SqlPagination {
       sql"select id, type_id, creator, assigned, status, proof from challenge where assigned = $userId".query[Challenge]
     ).stream
   }
+
 }
 
 object ChallengeDao {

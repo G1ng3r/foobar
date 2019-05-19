@@ -3,7 +3,6 @@ import axios from 'axios'
 import { Spin, Typography, Form, Icon, Input, Button } from 'antd'
 
 import styles from './Login.module.css'
-import { withRouter } from "react-router"
 
 class Login extends React.PureComponent {
     constructor(props) {
@@ -61,7 +60,7 @@ class Login extends React.PureComponent {
         }).then((data) => {
             localStorage.setItem('token', data.headers['access-token'])
             setTimeout(() => {
-                this.props.history.push('/main');
+                window.location = '/main';
             }, 100)
         }).catch(error => {
             this.setState({ error: 'Неверный логин или пароль', loading: false });
@@ -131,4 +130,4 @@ class Login extends React.PureComponent {
     }
 }
 
-export default withRouter(Login)
+export default Login
