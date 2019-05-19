@@ -1,7 +1,11 @@
 import React from "react"
 import { Link } from 'react-router-dom';
 
-import style from './IndexPage.module.css'
+import style from './IndexPage.module.css';
+
+let videoParams = 'autoplay=1';
+videoParams += '&showinfo=0';
+videoParams += '&modestbranding=1';
 
 export default () => (
     <div className={style.content}>
@@ -12,9 +16,14 @@ export default () => (
                 <p className={style.introText}>сервис добрых дел</p>
                 <p className={style.introText}><span className={style.logo}>NOW!</span></p>
 
-                <p className={style.showIntro}>Смотреть интро</p>
+                <iframe
+                    type="text/html"
+                    width="330"
+                    height="187"
+                    src={`http://www.youtube.com/embed/crhn668ona4?${videoParams}`}
+                    frameborder="0"
+                />
                 <Link className={style.skip} to={'/login'}>пропустить</Link>
-
             </div>
         </div>
 
