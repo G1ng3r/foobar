@@ -33,7 +33,7 @@ class ChallengeCurrent extends React.Component {
                     }
                 })
             } else {
-                this.props.history.location.push('/main')
+                this.props.history.push('/main')
             }
         })
     }
@@ -56,19 +56,19 @@ class ChallengeCurrent extends React.Component {
             const formData = new FormData()
             formData.append('proof', this.state.files[0])
 
-            axios.put(`challenge/${this.state.id}/accept`, formData, {
+            axios.put(`challenge/${this.state.id}/complete`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(() => {
-                this.props.history.location.push('/main')
+                this.props.history.push('/main')
             })
         }
     }
 
     handleDeclineClick = () => {
         axios.delete(`challenge/${this.state.id}/decline`).then(() => {
-            this.props.history.location.push('/main')
+            this.props.history.push('/main')
         })
     }
 

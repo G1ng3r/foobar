@@ -45,7 +45,6 @@ class ChallengeGiveToPerson extends React.Component {
     }
 
     assign = () => {
-
         axios.post(`challenge/${this.state.selectedChallenge}/assign/${this.props.match.params.id}`).then(() => {
             this.props.history.push('/main')
         })
