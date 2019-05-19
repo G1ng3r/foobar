@@ -27,7 +27,7 @@ class ChallengeController(val config: HttpConfig,
           complete(challengeService.acceptChallenge(token.userId, challengeId))
         } ~
         (put & path("complete")) {
-          storeUploadedFile("proof", tempDestination) { case (metadata, file) =>
+          fileUpload("proof") { case (metadata, file) =>
             if (metadata.contentType.mediaType.isImage) {
               complete(challengeService.completeChallenge(token.userId, challengeId, file))
             } else {
