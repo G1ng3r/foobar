@@ -54,4 +54,6 @@ case class Challenge(id: Long,
                      typeId: Int,
                      creator: Long,
                      assigned: Long,
-                     status: ChallengeStatus)
+                     status: ChallengeStatus,
+                     proof: Option[String]
+                    )
