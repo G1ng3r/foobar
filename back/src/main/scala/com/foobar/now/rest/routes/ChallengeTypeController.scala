@@ -20,6 +20,9 @@ class ChallengeTypeController(config: HttpConfig, challengeTypeService: Challeng
         entity(as[ChallengeType]) { challengeType =>
           complete(challengeTypeService.create(challengeType))
         }
+      } ~
+      (path(IntNumber) & get) { challengeTypeId =>
+        complete(challengeTypeService.get(challengeTypeId))
       }
     }
   }
