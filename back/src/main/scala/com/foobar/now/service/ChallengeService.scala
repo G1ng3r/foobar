@@ -102,7 +102,7 @@ class ChallengeService(config: KarmaConfig,
       .transact(xa)
   }
 
-  private def updateStatus(userId: Long, id: Long, status: ChallengeStatus) = {
+  private def updateStatus(id: Long, userId: Long, status: ChallengeStatus) = {
     challengeDao.setStatus(id, userId, status)
   }
 

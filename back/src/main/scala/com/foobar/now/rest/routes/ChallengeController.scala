@@ -24,15 +24,15 @@ class ChallengeController(val config: HttpConfig,
         (put & path("accept")) {
           complete(challengeService.acceptChallenge(token.userId, challengeId))
         } ~
-          (put & path("complete")) {
-            storeUploadedFile("proof", tempDestination) { case (metadata, file) =>
-              if (metadata.contentType.mediaType.isImage) {
-                complete(challengeService.completeChallenge(token.userId, challengeId, file))
-              } else {
-                complete(StatusCodes.BadRequest, "wrong proof photo uploaded")
-              }
+        (put & path("complete")) {
+          storeUploadedFile("proof", tempDestination) { case (metadata, file) =>
+            if (metadata.contentType.mediaType.isImage) {
+              complete(challengeService.completeChallenge(token.userId, challengeId, file))
+            } else {
+              complete(StatusCodes.BadRequest, "wrong proof photo uploaded")
             }
           }
+        }
       } ~
       (path(IntNumber / "assign" / LongNumber) & post) { case (challengeTypeId, assignedTo) =>
         complete(challengeService.createChallenge(challengeTypeId, token.userId, assignedTo))

@@ -31,6 +31,9 @@ class UserController(conf: HttpConfig, userService: UserService)(implicit s: Sch
 
       }
     } ~ withJwt(conf.secretKey) { token =>
+      (get & path(LongNumber)) { userId =>
+        complete(userService.get(userId))
+      } ~
       (get & path("info")) {
         complete(userService.get(token.userId))
       } ~
