@@ -15,7 +15,7 @@ import monix.execution.Scheduler
 import scala.util.{Failure, Success}
 
 class UserController(conf: HttpConfig, userService: UserService)(implicit s: Scheduler)
-  extends Controller with FailFastCirceSupport with JwtSupport {
+  extends Controller with FailFastCirceSupport with JwtSupport with MonixSupport {
 
   override val route: Route = pathPrefix("user") {
     (post & path("signin")) {
@@ -29,6 +29,19 @@ class UserController(conf: HttpConfig, userService: UserService)(implicit s: Sch
           case Failure(ex) => complete(StatusCodes.Unauthorized -> ex.getMessage)
         }
 
+      }
+    } ~ withJwt(conf.secretKey) { token =>
+      (get & path("info")) {
+        complete(userService.get(token.userId))
+      } ~
+      (get & pathEndOrSingleSlash & parameter('limit.as[Int].?)) { limit =>
+        complete(userService.list(token.userId, limit))
+      } ~
+      (get & path("near") & parameter('limit.as[Int].?)) { limit =>
+        complete(userService.near(token.userId, limit))
+      } ~
+      (get & path("friends") & parameter('limit.as[Int].?)) { limit =>
+        complete(userService.friends(token.userId, limit))
       }
     }
   }

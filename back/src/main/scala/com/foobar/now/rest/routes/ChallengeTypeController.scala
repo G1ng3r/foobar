@@ -13,11 +13,13 @@ class ChallengeTypeController(config: HttpConfig, challengeTypeService: Challeng
 
   override val route: Route = withJwt(config.secretKey) { token =>
     pathPrefix("challengeTypes") {
-      (get & parameter('limit.as[Int].?) & parameter('offset.as[Int].?)) { case (limit, offset) =>
+      (get & pathEndOrSingleSlash & parameter('limit.as[Int].?) & parameter('offset.as[Int].?)) { case (limit, offset) =>
         complete(challengeTypeService.list(limit, offset))
       } ~
-      (post & entity(as[ChallengeType])) { challengeType =>
-        complete(challengeTypeService.create(challengeType))
+      (post & pathEndOrSingleSlash) {
+        entity(as[ChallengeType]) { challengeType =>
+          complete(challengeTypeService.create(challengeType))
+        }
       }
     }
   }
