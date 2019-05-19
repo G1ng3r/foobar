@@ -39,6 +39,7 @@ class ChallengeSelect extends React.Component {
         return {
             ...challenge,
             ...type,
+            id: challenge.id,
             name,
             description: `${type.title} ${type.description}` || '-'
         }
