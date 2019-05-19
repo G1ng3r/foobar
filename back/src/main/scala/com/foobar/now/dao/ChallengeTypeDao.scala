@@ -13,12 +13,12 @@ class ChallengeTypeDao extends SqlPagination {
 
   def list(limit: Int, offset: Int): fs2.Stream[ConnectionIO, ChallengeType] = {
     paginate(limit, offset)(
-      sql"select id, title, description from challenge_type".query[ChallengeType]
+      sql"select id, title, description, difficulty from challenge_type".query[ChallengeType]
     ).stream
   }
 
   def get(id: Int): ConnectionIO[ChallengeType] = {
-    sql"select id, title, description from challenge_type where id = $id"
+    sql"select id, title, description, difficulty from challenge_type where id = $id"
       .query[ChallengeType]
       .unique
   }
