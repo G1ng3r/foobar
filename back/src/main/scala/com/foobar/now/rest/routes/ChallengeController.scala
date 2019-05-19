@@ -1,5 +1,6 @@
 package com.foobar.now.rest.routes
 
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives._
 import com.foobar.now.configuration.HttpConfig
@@ -7,9 +8,9 @@ import com.foobar.now.service.ChallengeService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 
-class ChallengeController(config: HttpConfig,
+class ChallengeController(val config: HttpConfig,
                           challengeService: ChallengeService)
-  extends Controller with FailFastCirceSupport with JwtSupport with MonixSupport {
+  extends Controller with UploadFilesSupport with FailFastCirceSupport with JwtSupport with MonixSupport {
   override val route: Route = withJwt(config.secretKey) { token =>
     pathPrefix("challenge") {
       pathPrefix(LongNumber) { id =>
@@ -23,7 +24,13 @@ class ChallengeController(config: HttpConfig,
           complete(challengeService.acceptChallenge(token.userId, id))
         } ~
         (put & path("complete")) {
-          complete(challengeService.completeChallenge(token.userId, id))
+          storeUploadedFile("proof", tempDestination) { case (metadata, file) =>
+            if (metadata.contentType.mediaType.isImage) {
+              complete(challengeService.completeChallenge(token.userId, id, file))
+            } else {
+              complete(StatusCodes.BadRequest, "wrong proof photo uploaded")
+            }
+          }
         }
       } ~
       (path(IntNumber / "assign" / LongNumber) & post) { case (challengeTypeId, assignedTo) =>

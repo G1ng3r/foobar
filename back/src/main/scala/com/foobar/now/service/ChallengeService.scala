@@ -1,5 +1,7 @@
 package com.foobar.now.service
 
+import java.io.File
+
 import com.foobar.now.configuration.KarmaConfig
 import com.foobar.now.dao.{ChallengeDao, ChallengeTypeDao, UserDao}
 import com.foobar.now.model.ChallengeStatus.ChallengeStatus
@@ -19,7 +21,7 @@ class ChallengeService(config: KarmaConfig,
     if (creator == assignedTo) {
       Task.raiseError(new Exception("Users are unable to assign challenge to themselves"))
     } else {
-      val challenge = Challenge(0, challengeTypeId, creator, assignedTo, ChallengeStatus.Assigned)
+      val challenge = Challenge(0, challengeTypeId, creator, assignedTo, ChallengeStatus.Assigned, None)
       challengeDao.create(challenge).transact(xa).map(_ => ())
     }
   }
@@ -50,9 +52,9 @@ class ChallengeService(config: KarmaConfig,
     } yield ()).transact(xa)
   }
 
-  def completeChallenge(userId: Long, id: Long): Task[Unit] = {
+  def completeChallenge(userId: Long, id: Long, proof: File): Task[Unit] = {
     (for {
-      challenge <- updateStatus(id, userId, ChallengeStatus.Completed)
+      challenge <- challengeDao.complete(id, userId, proof.getAbsolutePath)
       challengeType <- challengeTypeDao.get(challenge.typeId)
       _ <- userDao.updateKarma(challenge.assigned, challengeType.difficulty.id)
       _ <- userDao.becomeFriend(userId, challenge.assigned)

@@ -13,7 +13,7 @@ case class DatabaseConfig(driver: String,
 
 case class KarmaConfig(declineDecrease: Int)
 
-case class HttpConfig(host: String, port: Int, secretKey: String, tokenMaxAge: FiniteDuration)
+case class HttpConfig(host: String, port: Int, secretKey: String, tokenMaxAge: FiniteDuration, uploadFilesDir: String)
 
 case class AppConfig(database: DatabaseConfig, http: HttpConfig, karma: KarmaConfig)
 
