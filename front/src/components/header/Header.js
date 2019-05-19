@@ -25,11 +25,8 @@ const getTitle = (location) => {
 
 class Header extends React.Component {
 
-
     componentDidMount() {
-
         axios.get('user/info').then((data) => {
-            console.log(data)
             this.setState({
                 user: data.data
             })

@@ -15,7 +15,6 @@ class ChallengeSelect extends React.Component {
 
     componentDidMount() {
         axios.get('challengeTypes?limit=150').then(({ data }) => {
-            console.log('ttt', data)
             this.setState({
                 types: data
             })
@@ -28,7 +27,6 @@ class ChallengeSelect extends React.Component {
         })
 
         axios.post('challenge/random').then(({ data }) => {
-            console.log('DADA', data)
             this.setState({
                 daily: data
             })
