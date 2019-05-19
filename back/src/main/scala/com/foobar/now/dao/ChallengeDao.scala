@@ -34,7 +34,7 @@ class ChallengeDao extends SqlPagination {
     ).stream
   }
 
-  def complete(id: Long, userId: Long, proof: String): doobie.ConnectionIO[Challenge] = {
+  def complete(userId: Long, id: Long, proof: String): doobie.ConnectionIO[Challenge] = {
     val status = ChallengeStatus.Completed
     sql"update challenge set status = $status, proof = $proof where id = $id and assigned = $userId"
       .update
