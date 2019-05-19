@@ -23,7 +23,7 @@ export default () => (
                     height="187"
                     allowfullscreen="allowfullscreen"
                     src={`http://www.youtube.com/embed/crhn668ona4?${videoParams || ''}`}
-                    frameborder="0"
+                    frameBorder="0"
                 />
                 <Link className={style.skip} to={'/login'}>пропустить</Link>
             </div>
