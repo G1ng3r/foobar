@@ -1,6 +1,9 @@
 
 .text {
+    display: inline-block;
     margin-left: 16px;
+    text-overflow: ellipsis;
+    max-width: calc(100vw - 124px);
 }
 
 .card {
