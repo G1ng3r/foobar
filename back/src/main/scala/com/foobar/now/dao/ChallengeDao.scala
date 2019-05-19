@@ -65,6 +65,7 @@ class ChallengeDao extends SqlPagination {
       sql"select id, type_id, creator, assigned, status, proof from challenge where assigned = $userId".query[Challenge]
     ).stream
   }
+
 }
 
 object ChallengeDao {

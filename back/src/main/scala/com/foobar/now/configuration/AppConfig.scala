@@ -1,5 +1,6 @@
 package com.foobar.now.configuration
 
+import akka.http.scaladsl.model.Uri
 import monix.eval.Task
 import pureconfig.error.ConfigReaderFailures
 import pureconfig.generic.auto._
@@ -13,7 +14,12 @@ case class DatabaseConfig(driver: String,
 
 case class KarmaConfig(declineDecrease: Int)
 
-case class HttpConfig(host: String, port: Int, secretKey: String, tokenMaxAge: FiniteDuration, uploadFilesDir: String)
+case class HttpConfig(host: String,
+                      port: Int,
+                      secretKey: String,
+                      tokenMaxAge: FiniteDuration,
+                      uploadFilesDir: String,
+                      fileUploadSizeLimit: Long)
 
 case class AppConfig(database: DatabaseConfig, http: HttpConfig, karma: KarmaConfig)
 
