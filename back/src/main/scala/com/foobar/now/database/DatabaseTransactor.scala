@@ -12,7 +12,7 @@ object DatabaseTransactor {
 
   def apply(config: DatabaseConfig): Resource[Task, HikariTransactor[Task]] =
     for {
-      ce <- ExecutionContexts.fixedThreadPool[Task](32)
+      ce <- ExecutionContexts.fixedThreadPool[Task](4)
       te <- ExecutionContexts.cachedThreadPool[Task]
       xa <- HikariTransactor.newHikariTransactor[Task](
         config.driver, config.connection, config.username,

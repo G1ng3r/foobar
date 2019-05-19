@@ -21,7 +21,6 @@ class UserController(conf: HttpConfig, userService: UserService)(implicit s: Sch
     (post & path("signin")) {
       entity(as[SignIn]) { si =>
         val tokenF = userService.signIn(si).map(user => encodeToken(TokenClaim(user.id).asJson.noSpaces, conf)).runToFuture
-        userService.signIn(si).runToFuture.map(println).recover{case x => println(x)}
         onComplete(tokenF){
           case Success(token) =>
             respondWithHeader(RawHeader("Access-Token", token)) {

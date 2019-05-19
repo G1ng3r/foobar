@@ -7,13 +7,9 @@ import akka.stream.{ActorMaterializer, Materializer}
 import com.foobar.now.configuration.HttpConfig
 import monix.eval.Task
 
-import scala.concurrent.{ExecutionContext, Future}
-
 object HttpServer {
   implicit val actorSystem: ActorSystem = ActorSystem("foobar")
   implicit val materializer: Materializer = ActorMaterializer()
-
-  implicit val executionContext: ExecutionContext = actorSystem.dispatcher
 
   def apply(config: HttpConfig, routes: Route): Task[Http.ServerBinding] = {
     Task.deferFuture(

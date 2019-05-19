@@ -23,27 +23,16 @@ const getTitle = (location) => {
 }
 export default withRouter(({ location }) => (
     <header className={styles.header}>
-
-        <Row gutter={16} type="flex" className={styles.nav}>
-            <Col span={8}>
-                <Typography.Title level={3} className={styles.title}><a href="/main">Now!</a></Typography.Title>
-            </Col>
-            <Col span={14}>
-            </Col>
-            <Col span={2}>
-                <Icon type="more"/>
-            </Col>
-        </Row>
-
         <Row gutter={16} type="flex" justify="space-around" align="middle" className={styles.user}>
-            <Col span={8}>
+            <Col span={6}>
+                <Typography.Title level={2} className={styles.title}><a href="/main">Now!</a></Typography.Title>
+            </Col>
+            <Col span={12} >
+                <Typography.Title level={2}>{getTitle(location)}</Typography.Title>
+            </Col>
+            <Col span={6} style={{ textAlign: 'right' }}>
                 <Avatar/>
             </Col>
-            <Col span={12}>{getTitle(location)}</Col>
-            <Col span={4} style={{ textAlign: 'right' }}>
-                <Icon type="search"/>
-            </Col>
         </Row>
-
     </header>
 ))
