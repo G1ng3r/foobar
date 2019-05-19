@@ -2,7 +2,7 @@ import React from 'react';
 import {useDropzone} from 'react-dropzone';
 import styles from './FileUpload.module.css'
 
-export default () => {
+export default ({ updateFiles }) => {
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
 
     const files = acceptedFiles.map(file => (
@@ -11,6 +11,7 @@ export default () => {
         </li>
     ));
 
+    updateFiles(acceptedFiles)
     return (
         <section className={styles.fileupload}>
             <div {...getRootProps({className: styles.dropzone})}>
