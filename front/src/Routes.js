@@ -25,7 +25,7 @@ export default () => (
                     <Route path={'/login'} exact={true} component={Login}/>
                     <Route path={'/challenge/search'} exact={true} component={ChallengeSearch}/>
                     <Route path={'/challenge/select'} exact={true} component={ChallengeSelect}/>
-                    <Route path={'/challenge/take'} exact={true} component={ChallengeTake}/>
+                    <Route path={'/challenge/take/:id'} exact={true} component={ChallengeTake}/>
                     <Route path={'/challenge/current'} exact={true} component={ChallengeCurrent}/>
                     <Route path={'/challenge/give'} exact={true} component={ChallengeGive}/>
                     <Route path={'/challenge/give/:id'} component={ChallengeGiveToPerson}/>
