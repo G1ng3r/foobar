@@ -27,15 +27,6 @@ class ChallengeController(val config: HttpConfig,
           complete(challengeService.acceptChallenge(token.userId, challengeId))
         } ~
         (put & path("complete")) {
-          fileUpload("proof") { case (metadata, file) =>
-            if (metadata.contentType.mediaType.isImage) {
-              complete(challengeService.completeChallenge(token.userId, challengeId, file))
-            } else {
-              complete(StatusCodes.BadRequest, "wrong proof photo uploaded")
-            }
-          }
-        } ~
-        (put & path("complete")) {
           withSizeLimit(config.fileUploadSizeLimit) {
             fileUpload("proof") { case (metadata, file) =>
               if (metadata.contentType.mediaType.isImage) {
