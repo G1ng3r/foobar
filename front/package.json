@@ -14,9 +14,12 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1"
   },
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env REACT_APP_API_URL=https://cors-anywhere.herokuapp.com/84.201.160.35/api/v1/ react-scripts start",
+    "build": "cross-env REACT_APP_API_URL=/api/v1/ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

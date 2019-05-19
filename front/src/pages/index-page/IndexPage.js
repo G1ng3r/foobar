@@ -13,7 +13,7 @@ export default () => (
                 <p className={style.introText}><span className={style.logo}>NOW!</span></p>
 
                 <p className={style.showIntro}>Смотреть интро</p>
-                <Link className={style.skip} to={'/main'}>пропустить</Link>
+                <Link className={style.skip} to={'/login'}>пропустить</Link>
 
             </div>
         </div>
