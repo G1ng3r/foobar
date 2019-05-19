@@ -12,22 +12,31 @@ class ChallengeController(config: HttpConfig,
   extends Controller with FailFastCirceSupport with JwtSupport with MonixSupport {
   override val route: Route = withJwt(config.secretKey) { token =>
     pathPrefix("challenge") {
-      pathPrefix(LongNumber) { id =>
+      pathPrefix(LongNumber) { challengeId =>
         (get & pathEndOrSingleSlash) {
-          complete(challengeService.getChallenge(id))
+          complete(challengeService.getChallenge(challengeId))
         } ~
         (delete & path("decline")) {
-          complete(challengeService.declineChallenge(token.userId, id))
+          complete(challengeService.declineChallenge(token.userId, challengeId))
         } ~
         (put & path("accept")) {
-          complete(challengeService.acceptChallenge(token.userId, id))
+          complete(challengeService.acceptChallenge(token.userId, challengeId))
         } ~
         (put & path("complete")) {
-          complete(challengeService.completeChallenge(token.userId, id))
+          complete(challengeService.completeChallenge(token.userId, challengeId))
         }
       } ~
       (path(IntNumber / "assign" / LongNumber) & post) { case (challengeTypeId, assignedTo) =>
         complete(challengeService.createChallenge(challengeTypeId, token.userId, assignedTo))
+      } ~
+      (path("random") & post) {
+        complete(challengeService.getRandomChallenge(token.userId))
+      } ~
+      (path("random" / "list") & get) {
+        complete(challengeService.listRandomChallengeTypes)
+      } ~
+      (path("assigned") & get & parameter('offset.as[Int].?) & parameter('limit.as[Int].?)) { case (offset, limit) =>
+        complete(challengeService.getAssignedChallenges(token.userId, limit, offset))
       }
     }
   }

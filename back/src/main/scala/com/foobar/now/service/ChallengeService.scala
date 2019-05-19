@@ -3,7 +3,8 @@ package com.foobar.now.service
 import com.foobar.now.configuration.KarmaConfig
 import com.foobar.now.dao.{ChallengeDao, ChallengeTypeDao, UserDao}
 import com.foobar.now.model.ChallengeStatus.ChallengeStatus
-import com.foobar.now.model.{Challenge, ChallengeStatus}
+import com.foobar.now.model.{Challenge, ChallengeStatus, ChallengeType}
+import doobie.free.connection
 import doobie.util.transactor.Transactor
 import monix.eval.Task
 import doobie.implicits._
@@ -24,12 +25,24 @@ class ChallengeService(config: KarmaConfig,
     }
   }
 
+  def getRandomChallenge(userId: Long): Task[Challenge] = {
+    (for {
+      challengeType <- challengeTypeDao.getRandom
+      newChallenge = Challenge(0, challengeType.id, 0, userId, ChallengeStatus.Assigned)
+      challenge <- challengeDao.create(newChallenge)
+    } yield challenge).transact(xa)
+  }
+
+  def listRandomChallengeTypes: Task[Seq[ChallengeType]] = {
+    challengeTypeDao.listRandom.compile.toList.transact(xa)
+  }
+
   def getChallenge(id: Long): Task[Challenge] = {
     challengeDao.get(id).transact(xa)
   }
 
-  def getAssignedChallenges(userId: Long, limit: Int, offset: Int): Task[List[Challenge]] = {
-    challengeDao.getAssigned(userId, ChallengeStatus.Assigned, limit, offset)
+  def getAssignedChallenges(userId: Long, limit: Option[Int], offset: Option[Int]): Task[List[Challenge]] = {
+    challengeDao.getAssigned(userId, ChallengeStatus.Assigned, limit.getOrElse(10), offset.getOrElse(0))
       .compile
       .toList
       .transact(xa)
@@ -44,9 +57,8 @@ class ChallengeService(config: KarmaConfig,
   def declineChallenge(userId: Long, id: Long): Task[Unit] = {
     (for {
       challenge <- updateStatus(id, userId, ChallengeStatus.Declined)
-      user <- userDao.get(challenge.assigned)
-      newKarmaValue = user.karma - config.declineDecrease
-      _ <- userDao.updateKarma(user.id, if (newKarmaValue < 0) 0 else newKarmaValue)
+      _ <- if (challenge.status == ChallengeStatus.Accepted) penalty(challenge.assigned)
+           else connection.unit
     } yield ()).transact(xa)
   }
 
@@ -61,5 +73,13 @@ class ChallengeService(config: KarmaConfig,
 
   private def updateStatus(userId: Long, id: Long, status: ChallengeStatus) = {
     challengeDao.setStatus(id, userId, status)
+  }
+
+  private def penalty(assignedTo: Long) = {
+    for {
+      user <- userDao.get(assignedTo)
+      newKarmaValue = user.karma - config.declineDecrease
+      _ <- userDao.updateKarma(user.id, if (newKarmaValue < 0) 0 else newKarmaValue)
+    } yield ()
   }
 }
