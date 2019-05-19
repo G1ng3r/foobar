@@ -34,8 +34,10 @@ class ChallengeDao extends SqlPagination {
     ).stream
   }
 
-  def setStatus(userId: Long, id: Long, status: ChallengeStatus): ConnectionIO[Int] = {
-    sql"update challenge set status = $status where id = $id and assigned = $userId".update.run
+  def setStatus(userId: Long, id: Long, status: ChallengeStatus): ConnectionIO[Challenge] = {
+    sql"update challenge set status = $status where id = $id and assigned = $userId"
+      .update
+      .withUniqueGeneratedKeys("id", "type_id", "creator", "assigned", "status")
   }
 }
 

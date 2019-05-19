@@ -33,9 +33,13 @@ object WebServer extends TaskApp with LazyLogging {
                               xa: HikariTransactor[Task]): Resource[Task, Http.ServerBinding] = {
     implicit val s: Scheduler = scheduler
 
+    val userDao = new UserDao
+    val challengeTypeDao = new ChallengeTypeDao()
+    val challengeDao = new ChallengeDao()
+
     val controllers = Seq(
-      new UserController(config.http, new UserService(new UserDao, xa)),
-      new ChallengeController(config.http, new ChallengeService(new ChallengeDao(), xa)),
+      new UserController(config.http, new UserService(userDao, xa)),
+      new ChallengeController(config.http, new ChallengeService(config.karma, challengeTypeDao, challengeDao, userDao, xa)),
       new ChallengeTypeController(config.http, new ChallengeTypeService(new ChallengeTypeDao(), xa))
     )
 

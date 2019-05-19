@@ -4,7 +4,7 @@ import com.foobar.now.model.User
 import doobie.free.connection.ConnectionIO
 import doobie.implicits._
 
-class UserDao extends SqlPagination {
+class UserDao {
 
   def signIn(loginOrEmail: String, password: String): ConnectionIO[User] = {
     sql"""select id, login, name, email, location, avatar, karma from public.user
@@ -44,5 +44,15 @@ class UserDao extends SqlPagination {
        """.stripMargin
       .query[User]
       .stream
+  }
+
+  def becomeFriend(userId: Long, friendId: Long): ConnectionIO[Int] = {
+    sql"insert into friends (user_id, friend_id) values ($userId, $friendId) on conflict do nothing"
+      .update
+      .run
+  }
+
+  def updateKarma(userId: Long, points: Int): ConnectionIO[Int] = {
+    sql"update public.user set karma = $points where id = $userId".update.run
   }
 }
