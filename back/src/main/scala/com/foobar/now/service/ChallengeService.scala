@@ -2,6 +2,7 @@ package com.foobar.now.service
 
 import java.io.File
 
+import cats.data.NonEmptyList
 import com.foobar.now.configuration.KarmaConfig
 import com.foobar.now.dao.{ChallengeDao, ChallengeTypeDao, UserDao}
 import com.foobar.now.model.ChallengeStatus.ChallengeStatus
@@ -50,6 +51,13 @@ class ChallengeService(config: KarmaConfig,
       .transact(xa)
   }
 
+  def getAcceptedChallenges(userId: Long, limit: Option[Int], offset: Option[Int]): Task[List[Challenge]] = {
+    challengeDao.getAssigned(userId, ChallengeStatus.Accepted, limit.getOrElse(10), offset.getOrElse(0))
+      .compile
+      .toList
+      .transact(xa)
+  }
+
   def acceptChallenge(userId: Long, id: Long): Task[Unit] = {
     updateStatus(id, userId, ChallengeStatus.Accepted)
       .transact(xa)
@@ -71,6 +79,27 @@ class ChallengeService(config: KarmaConfig,
       _ <- userDao.updateKarma(challenge.assigned, challengeType.difficulty.id)
       _ <- userDao.becomeFriend(userId, challenge.assigned)
     } yield ()).transact(xa)
+  }
+
+  def feed(userId: Long, limit: Option[Int], offset: Option[Int]): Task[List[Challenge]] = {
+    (for {
+      ids <- userDao.getAllFriends(userId).compile.toList
+      assigned <- challengeDao.feed(NonEmptyList.fromListUnsafe(userId +: ids), limit.getOrElse(10), offset.getOrElse(0)).compile.toList
+    } yield assigned).transact(xa)
+  }
+
+  def assignedToMe(userId: Long, limit: Option[Int], offset: Option[Int]) = {
+    challengeDao.assignedToMe(userId, limit.getOrElse(10), offset.getOrElse(0))
+      .compile
+      .toList
+      .transact(xa)
+  }
+
+  def createdByMe(userId: Long, limit: Option[Int], offset: Option[Int]) = {
+    challengeDao.assignedToMe(userId, limit.getOrElse(10), offset.getOrElse(0))
+      .compile
+      .toList
+      .transact(xa)
   }
 
   private def updateStatus(userId: Long, id: Long, status: ChallengeStatus) = {

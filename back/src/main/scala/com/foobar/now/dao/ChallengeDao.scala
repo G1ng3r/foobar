@@ -46,6 +46,25 @@ class ChallengeDao extends SqlPagination {
       .update
       .withUniqueGeneratedKeys("id", "type_id", "creator", "assigned", "status", "proof")
   }
+
+  def feed(ids: NonEmptyList[Long], limit: Int, offset: Int): fs2.Stream[ConnectionIO, Challenge] = {
+    paginate(limit, offset)(
+      (sql"select id, type_id, creator, assigned, status, proof from challenge where " ++
+        Fragments.or(Fragments.in(fr"creator", ids), Fragments.in(fr"assigned", ids))).query[Challenge]
+    ).stream
+  }
+
+  def assignedToMe(userId: Long, limit: Int, offset: Int): fs2.Stream[ConnectionIO, Challenge] = {
+    paginate(limit, offset)(
+      sql"select id, type_id, creator, assigned, status, proof from challenge where assigned = $userId".query[Challenge]
+    ).stream
+  }
+
+  def createdByMe(userId: Long, limit: Int, offset: Int): fs2.Stream[ConnectionIO, Challenge] = {
+    paginate(limit, offset)(
+      sql"select id, type_id, creator, assigned, status, proof from challenge where assigned = $userId".query[Challenge]
+    ).stream
+  }
 }
 
 object ChallengeDao {

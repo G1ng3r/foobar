@@ -45,6 +45,18 @@ class ChallengeController(val config: HttpConfig,
       } ~
       (path("assigned") & get & parameter('offset.as[Int].?) & parameter('limit.as[Int].?)) { case (offset, limit) =>
         complete(challengeService.getAssignedChallenges(token.userId, limit, offset))
+      } ~
+      (path("accepted") & get & parameter('offset.as[Int].?) & parameter('limit.as[Int].?)) { case (offset, limit) =>
+        complete(challengeService.getAcceptedChallenges(token.userId, limit, offset))
+      } ~
+      (path("feed") & get & parameter('offset.as[Int].?) & parameter('limit.as[Int].?)) { case (offset, limit) =>
+        complete(challengeService.feed(token.userId, limit, offset))
+      } ~
+      (path("feed" / "assigned-to-me") & get & parameter('offset.as[Int].?) & parameter('limit.as[Int].?)) { case (offset, limit) =>
+        complete(challengeService.assignedToMe(token.userId, limit, offset))
+      } ~
+      (path("feed" / "created-by-me") & get & parameter('offset.as[Int].?) & parameter('limit.as[Int].?)) { case (offset, limit) =>
+        complete(challengeService.assignedToMe(token.userId, limit, offset))
       }
     }
   }
