@@ -1,0 +1,11 @@
+.content {
+    min-height: calc(100vh - 180px);
+    padding-top: 20px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/*https://cors-anywhere.herokuapp.com/84.201.160.35/api/v1/user/signin*/
