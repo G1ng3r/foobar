@@ -1,6 +1,7 @@
 import React from "react"
 import { Button, Typography } from "antd"
 import Friend from "./Friend"
+import axios from '../../../utils/axios'
 
 import styles from './Friends.module.css'
 import { withRouter } from "react-router"
@@ -51,21 +52,45 @@ const giveChallenge = (history) => () => {
     history.push('/challenge/give')
 }
 
-export default withRouter(({ history }) => (
-    <React.Fragment>
-        <div className={styles.header}>
-            <Typography.Title level={4} className={styles.title}>Друзья</Typography.Title>
-            <Button type="primary" className={styles.button} onClick={giveChallenge(history)}>
-                Дать задание
-            </Button>
-        </div>
-        {friends.map(friend => (
-            <Friend key={friend.name} friend={friend} />
-        ))}
-        <div className={styles.footer}>
-        <Button type="primary" className={styles.button} onClick={giveChallenge(history)}>
-            Дать задание
-        </Button>
-        </div>
-    </React.Fragment>
-))
+
+class Friends extends React.Component {
+
+    state = {
+        feed: []
+    }
+
+    componentDidMount() {
+        axios.get('challenge/feed').then(({ data }) => {
+            console.log(data)
+        })
+    }
+
+    render() {
+
+        if (this.state.feed.length === 0) {
+            // return null
+        }
+
+
+        return (
+            <React.Fragment>
+                <div className={styles.header}>
+                    <Typography.Title level={4} className={styles.title}>Друзья</Typography.Title>
+                    <Button type="primary" className={styles.button} onClick={giveChallenge(this.props.history)}>
+                        Дать задание
+                    </Button>
+                </div>
+                {friends.map(friend => (
+                    <Friend key={friend.name} friend={friend}/>
+                ))}
+                <div className={styles.footer}>
+                    <Button type="primary" className={styles.button} onClick={giveChallenge(this.props.history)}>
+                        Дать задание
+                    </Button>
+                </div>
+            </React.Fragment>
+        )
+    }
+}
+
+export default withRouter(Friends)

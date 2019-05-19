@@ -14,7 +14,9 @@ class ChallengeCurrent extends React.Component {
 
     state = {
         assignment: null,
-        visible: false
+        visible: false,
+        id: null,
+        files: []
     }
 
     componentDidMount() {
@@ -25,7 +27,8 @@ class ChallengeCurrent extends React.Component {
                     const assType = _.find(data, {id: assignment.typeId})
                     if (assType) {
                         this.setState({
-                            assignment: assType
+                            assignment: assType,
+                            id: assignment.id
                         })
                     }
                 })
@@ -47,10 +50,42 @@ class ChallengeCurrent extends React.Component {
         })
     }
 
+
+    handleOk = () => {
+        if(this.state.files.length > 0) {
+            const formData = new FormData()
+            formData.append('proof', this.state.files[0])
+
+            axios.put(`challenge/${this.state.id}/accept`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(() => {
+                this.props.history.location.push('/main')
+            })
+        }
+    }
+
+    handleDeclineClick = () => {
+        axios.delete(`challenge/${this.state.id}/decline`).then(() => {
+            this.props.history.location.push('/main')
+        })
+    }
+
+    handleFilesUpdate = (files)=> {
+        if(this.state.files !== files) {
+            this.setState({
+                files
+            })
+        }
+    }
+
     render() {
         const { assignment } = this.state
         if (!assignment) {
-            return <Spin />
+            return (
+                <div className={style.loader}><Spin /></div>
+            )
         }
 
         return (
@@ -62,7 +97,7 @@ class ChallengeCurrent extends React.Component {
                 <Affix offsetBottom={32} className={style["action-bar"]}>
                     <Row gutter={40}>
                         <Col span={12}>
-                            <Button href="/main" className={cn(style.button, style.red)}
+                            <Button onClick={this.handleDeclineClick} className={cn(style.button, style.red)}
                                     size="large">Отказаться</Button>
                         </Col>
                         <Col span={12}>
@@ -79,7 +114,7 @@ class ChallengeCurrent extends React.Component {
                     cancelText={"Отмена"}
                     okText={"Загрузить"}
                 >
-                    <FileUpload/>
+                    <FileUpload updateFiles={this.handleFilesUpdate}/>
                 </Modal>
             </React.Fragment>
         )
