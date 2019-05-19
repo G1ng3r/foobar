@@ -34,7 +34,7 @@ class ChallengeController(val config: HttpConfig,
               complete(StatusCodes.BadRequest, "wrong proof photo uploaded")
             }
           }
-        }
+        } ~
         (put & path("complete")) {
           withSizeLimit(config.fileUploadSizeLimit) {
             fileUpload("proof") { case (metadata, file) =>
