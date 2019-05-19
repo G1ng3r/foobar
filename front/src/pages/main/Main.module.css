@@ -21,6 +21,11 @@
     color: white;
 }
 
+.challenge {
+    text-align: center;
+    padding: 16px;
+}
+
 .event-logo {
     width: 64px;
     margin-right: 32px;

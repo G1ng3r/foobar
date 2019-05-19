@@ -3,7 +3,7 @@ import axios from '../../utils/axios'
 import { Spin } from "antd"
 import React from "react"
 
-// TODO: Отправка на бэк и получение id
+
 export default withRouter(({ history, match }) => {
     console.log(match.params.id)
     axios.put(`challenge/${match.params.id}/accept`)
